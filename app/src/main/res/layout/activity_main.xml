@@ -9,8 +9,25 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.yirugao.dec1606_littlemermaid.MainActivity">
 
-    <TextView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:text="Launch Conversation"
+        android:id="@+id/launchButton"
+        android:layout_marginLeft="150dp"
+        android:layout_marginStart="150dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Receive Conversation"
+        android:id="@+id/receiveButton"
+        android:layout_marginRight="150dp"
+        android:layout_marginEnd="150dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>
