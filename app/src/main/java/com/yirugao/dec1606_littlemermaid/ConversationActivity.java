@@ -1,13 +1,10 @@
 package com.yirugao.dec1606_littlemermaid;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class ConversationActivity extends Activity implements View.OnClickListener {
@@ -16,6 +13,9 @@ public class ConversationActivity extends Activity implements View.OnClickListen
     Button nextButton,startButton,exitButton;
     Button foodLabel,weatherLabel,questionLabel,greetingLabel,feelingLabel,
              askingLabel,bodyLabel,locationLabel,sportLabel;
+
+    /*Testing remove later*/
+    String toastMessage = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,10 @@ public class ConversationActivity extends Activity implements View.OnClickListen
         sportLabel = (Button) findViewById(R.id.sportButton);
 
         /*setup the listener*/
+        nextButton.setOnClickListener(this);
+        startButton.setOnClickListener(this);
+        exitButton.setOnClickListener(this);
+
         foodLabel.setOnClickListener(this);
         weatherLabel.setOnClickListener(this);
         questionLabel.setOnClickListener(this);
@@ -51,10 +55,6 @@ public class ConversationActivity extends Activity implements View.OnClickListen
 
     }
 
-    /*Launch Button method:
-        * Return error message if user has no selected any id label
-        * Return selected id message
-        * */
     @Override
     public void onClick(View v) {
 
@@ -62,38 +62,57 @@ public class ConversationActivity extends Activity implements View.OnClickListen
         switch (v.getId()){
 
             case R.id.foodButton:
-                Toast.makeText(getApplicationContext(), "This is food button", Toast.LENGTH_SHORT).show();
+                toastMessage = "food ";
                 break;
             case R.id.weatherButton:
-                Toast.makeText(getApplicationContext(), "This is weather button", Toast.LENGTH_SHORT).show();
+                toastMessage = "weather ";
                 break;
             case R.id.questionButton:
-                Toast.makeText(getApplicationContext(), "This is question button", Toast.LENGTH_SHORT).show();
+                toastMessage = "question ";
                 break;
             case R.id.greetingButton:
-                Toast.makeText(getApplicationContext(), "This is greeting button", Toast.LENGTH_SHORT).show();
+                toastMessage = "greeting ";
                 break;
             case R.id.feelingButton:
-                Toast.makeText(getApplicationContext(), "This is feeling button", Toast.LENGTH_SHORT).show();
+                toastMessage = "feeling ";
                 break;
             case R.id.askButton:
-                Toast.makeText(getApplicationContext(), "This is ask button", Toast.LENGTH_SHORT).show();
+                toastMessage = "ask ";
                 break;
             case R.id.bodyButton:
-                Toast.makeText(getApplicationContext(), "This is body button", Toast.LENGTH_SHORT).show();
+                toastMessage = "body ";
                 break;
             case R.id.locationButton:
-                Toast.makeText(getApplicationContext(), "This is location button", Toast.LENGTH_SHORT).show();
+                toastMessage = "location ";
                 break;
             case R.id.sportButton:
-                Toast.makeText(getApplicationContext(), "This is sport button", Toast.LENGTH_SHORT).show();
+                toastMessage = "sport ";
+                break;
+            case R.id.nextButton:
+                Toast.makeText(getApplicationContext(), "This is no current next category", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.startButton:
+                launchCategory();
+                break;
+            case R.id.exitButton:
+
                 break;
             default:
                 break;
-
         }
-
-
     }
+
+    /*Launch Button method:
+        * Return error message if user has no selected any id label
+        * Return selected id message
+        * */
+    public void launchCategory(){
+        if (toastMessage.equals("")){
+            Toast.makeText(getApplicationContext(), "Please selected the category", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
 }
