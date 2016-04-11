@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.yirugao.dec1606_littlemermaid.ConversationActivity">
+
+    <Button
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:text="Next"
+        android:id="@+id/nextButton"
+        android:textSize="18sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="128dp" />
+
+    <Button
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:text="Launch"
+        android:id="@+id/startButton"
+        android:textSize="18sp"
+        android:layout_below="@+id/nextButton"
+        android:layout_alignLeft="@+id/nextButton"
+        android:layout_alignStart="@+id/nextButton" />
+
+    <Button
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:text="Exit"
+        android:id="@+id/exitButton"
+        android:textSize="18sp"
+        android:layout_below="@+id/startButton"
+        android:layout_alignLeft="@+id/startButton"
+        android:layout_alignStart="@+id/startButton" />
+
+    <Button
+        android:layout_width="155dp"
+        android:layout_height="90dp"
+        android:text="FOOD"
+        android:id="@+id/foodButton"
+        android:textSize="21sp"
+        android:layout_above="@+id/startButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="61dp" />
+
+    <Button
+        android:layout_width="155dp"
+        android:layout_height="90dp"
+        android:text="WEATHERS"
+        android:id="@+id/weatherButton"
+        android:textSize="21sp"
+        android:layout_marginLeft="55dp"
+        android:layout_marginStart="55dp"
+        android:layout_alignTop="@+id/foodButton"
+        android:layout_toRightOf="@+id/foodButton"
+        android:layout_toEndOf="@+id/foodButton" />
+
+    <Button
+        android:layout_width="155dp"
+        android:layout_height="90dp"
+        android:text="QUESTION"
+        android:id="@+id/questionButton"
+        android:textSize="21sp"
+        android:layout_marginLeft="55dp"
+        android:layout_marginStart="55dp"
+        android:layout_alignTop="@+id/weatherButton"
+        android:layout_toRightOf="@+id/weatherButton"
+        android:layout_toEndOf="@+id/weatherButton" />
+
+    <Button
+        android:layout_width="155dp"
+        android:layout_height="90dp"
+        android:text="GREETING"
+        android:id="@+id/greetingButton"
+        android:textSize="21sp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="155dp"
+        android:layout_height="90dp"
+        android:text="FEELING"
+        android:id="@+id/feelingButton"
+        android:textSize="21sp"
+        android:layout_alignTop="@+id/greetingButton"
+        android:layout_toLeftOf="@+id/questionButton"
+        android:layout_toStartOf="@+id/questionButton" />
+
+    <Button
+        android:layout_width="155dp"
+        android:layout_height="90dp"
+        android:text="ASKING"
+        android:id="@+id/askButton"
+        android:textSize="21sp"
+        android:layout_alignTop="@+id/feelingButton"
+        android:layout_alignLeft="@+id/questionButton"
+        android:layout_alignStart="@+id/questionButton" />
+
+    <Button
+        android:layout_width="155dp"
+        android:layout_height="90dp"
+        android:text="BODY"
+        android:id="@+id/bodyButton"
+        android:textSize="21sp"
+        android:layout_below="@+id/exitButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="155dp"
+        android:layout_height="90dp"
+        android:text="LOCATION"
+        android:id="@+id/locationButton"
+        android:textSize="21sp"
+        android:layout_alignTop="@+id/bodyButton"
+        android:layout_alignLeft="@+id/feelingButton"
+        android:layout_alignStart="@+id/feelingButton" />
+
+    <Button
+        android:layout_width="155dp"
+        android:layout_height="90dp"
+        android:text="SPORT"
+        android:id="@+id/sportButton"
+        android:textSize="21sp"
+        android:layout_alignTop="@+id/locationButton"
+        android:layout_alignLeft="@+id/askButton"
+        android:layout_alignStart="@+id/askButton" />
+
+</RelativeLayout>

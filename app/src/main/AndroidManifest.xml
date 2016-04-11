@@ -16,18 +16,25 @@
             </intent-filter>
         </activity>
         <activity android:name=".SettingActivity" />
+
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value="com.yirugao.dec1606_littlemermaid.MainActivity" />
+
         <activity android:name=".ProfileActivity" />
+
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value="com.yirugao.dec1606_littlemermaid.MainActivity" />
+
         <activity android:name=".RecordingActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.yirugao.dec1606_littlemermaid.MainActivity" />
         </activity>
+
+        <activity android:name=".ConversationActivity"></activity>
+
     </application>
 
 </manifest>
