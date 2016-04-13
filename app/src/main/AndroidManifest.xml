@@ -32,7 +32,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.yirugao.dec1606_littlemermaid.MainActivity" />
         </activity>
-        <activity android:name=".LaunchActivity"></activity>
+        <activity android:name=".LaunchActivity" />
+        <activity android:name=".ReceiveActivity"></activity>
     </application>
 
 </manifest>
