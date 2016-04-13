@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         launchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ConversationActivity.class);
+                Intent intent = new Intent(MainActivity.this, LaunchActivity.class);
                 MainActivity.this.startActivity(intent);
             }
         });

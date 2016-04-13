@@ -1,18 +1,17 @@
 package com.yirugao.dec1606_littlemermaid;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class ConversationActivity extends Activity implements View.OnClickListener {
+public class LaunchActivity extends Activity implements View.OnClickListener {
 
     /*Declaration Button and Label View variable*/
     Button nextButton,startButton,exitButton;
     Button foodLabel,weatherLabel,questionLabel,greetingLabel,feelingLabel,
-             askingLabel,bodyLabel,locationLabel,sportLabel;
+            askingLabel,bodyLabel,locationLabel,sportLabel;
 
     /*Testing remove later*/
     String toastMessage = "";
@@ -20,9 +19,9 @@ public class ConversationActivity extends Activity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_conversation);
+        setContentView(R.layout.activity_launch);
 
-        /*Assign associate navigation ID to the button variable*/
+         /*Assign associate navigation ID to the button variable*/
         nextButton = (Button) findViewById(R.id.nextButton);
         startButton = (Button) findViewById(R.id.startButton);
         exitButton = (Button) findViewById(R.id.exitButton);
@@ -113,6 +112,5 @@ public class ConversationActivity extends Activity implements View.OnClickListen
             Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
         }
     }
-
 
 }
