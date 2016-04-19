@@ -1,6 +1,7 @@
 package com.yirugao.dec1606_littlemermaid;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -110,6 +111,9 @@ public class LaunchActivity extends Activity implements View.OnClickListener {
             Toast.makeText(getApplicationContext(), "Please selected the category", Toast.LENGTH_SHORT).show();
         }else{
             Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(LaunchActivity.this, ReceiveActivity.class);
+            i.putExtra("word", toastMessage);
+            startActivity(i);
         }
     }
 
