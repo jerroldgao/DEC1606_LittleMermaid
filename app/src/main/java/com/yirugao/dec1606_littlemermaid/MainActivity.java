@@ -34,14 +34,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         /*launch to the receive activity*/
-        /*
-                receiveButton.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(MainActivity.this, ReceiveActivity.class);
-                        MainActivity.this.startActivity(intent);
-                    }
-                });*/
+        receiveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ReceiveActivity.class);
+                MainActivity.this.startActivity(intent);
+            }
+        });
     }
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();

@@ -12,12 +12,12 @@
     <Button
         android:layout_width="180dp"
         android:layout_height="60dp"
-        android:text="Next"
+        android:text="next"
         android:id="@+id/nextWordButton"
         android:textSize="18sp"
-        android:layout_above="@+id/returnButton"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/selfTextWordView"
+        android:layout_alignLeft="@+id/returnButton"
+        android:layout_alignStart="@+id/returnButton" />
 
     <Button
         android:layout_width="180dp"
@@ -25,7 +25,7 @@
         android:text="Return"
         android:id="@+id/returnButton"
         android:textSize="18sp"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/listenButton"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
@@ -41,13 +41,33 @@
         android:id="@+id/buttonLayout"></TableLayout>
 
     <TextView
-        android:layout_width="450dp"
-        android:layout_height="100dp"
-        android:id="@+id/textWordView"
-        android:layout_alignParentTop="true"
+        android:layout_width="400dp"
+        android:layout_height="50dp"
+        android:id="@+id/selfTextWordView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:textColor="#6980c5"
-        android:textSize="45dp" />
+        android:textSize="45sp"
+        android:layout_alignParentTop="true" />
+
+    <TextView
+        android:layout_width="400dp"
+        android:layout_height="50dp"
+        android:id="@+id/voiceTextWordView"
+        android:textColor="#6980c5"
+        android:textSize="45sp"
+        android:layout_above="@+id/nextWordButton"
+        android:layout_alignRight="@+id/nextWordButton"
+        android:layout_alignEnd="@+id/nextWordButton" />
+
+    <Button
+        android:layout_width="180dp"
+        android:layout_height="60dp"
+        android:text="listening"
+        android:id="@+id/listenButton"
+        android:textSize="18sp"
+        android:layout_below="@+id/nextWordButton"
+        android:layout_toRightOf="@+id/buttonLayout"
+        android:layout_toEndOf="@+id/buttonLayout" />
 
 </RelativeLayout>
