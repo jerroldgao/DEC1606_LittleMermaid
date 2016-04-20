@@ -104,6 +104,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener{
         }
 
             /*setup the listener*/
+            nextWordButton.setOnClickListener(this);
             returnButton.setOnClickListener(this);
     }
 
@@ -114,6 +115,9 @@ public class ReceiveActivity extends Activity implements View.OnClickListener{
         switch (v.getId()){
 
             //close return the launch the activity
+            case R.id.nextWordButton:
+                Toast.makeText(getApplicationContext(), "No more words", Toast.LENGTH_SHORT).show();
+                break;
             case R.id.returnButton:
                 this.finish();
                 break;
