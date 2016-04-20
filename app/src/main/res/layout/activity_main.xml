@@ -10,24 +10,26 @@
     tools:context="com.yirugao.dec1606_littlemermaid.MainActivity">
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="150dp"
         android:text="Launch Conversation"
         android:id="@+id/launchButton"
         android:layout_marginLeft="150dp"
         android:layout_marginStart="150dp"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textSize="25dp" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="150dp"
         android:text="Receive Conversation"
         android:id="@+id/receiveButton"
         android:layout_marginRight="150dp"
         android:layout_marginEnd="150dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:textSize="25dp" />
 </RelativeLayout>

@@ -95,7 +95,7 @@ public class LaunchActivity extends Activity implements View.OnClickListener {
                 launchCategory();
                 break;
             case R.id.exitButton:
-
+                this.finish();
                 break;
             default:
                 break;
