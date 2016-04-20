@@ -98,8 +98,8 @@
     <Button
         android:layout_width="155dp"
         android:layout_height="90dp"
-        android:text="ASKING"
-        android:id="@+id/askButton"
+        android:text="ANIMAL"
+        android:id="@+id/animalButton"
         android:textSize="21sp"
         android:layout_alignTop="@+id/feelingButton"
         android:layout_alignLeft="@+id/questionButton"
@@ -118,8 +118,8 @@
     <Button
         android:layout_width="155dp"
         android:layout_height="90dp"
-        android:text="LOCATION"
-        android:id="@+id/locationButton"
+        android:text="COLOR"
+        android:id="@+id/colorButton"
         android:textSize="21sp"
         android:layout_alignTop="@+id/bodyButton"
         android:layout_alignLeft="@+id/feelingButton"
@@ -131,8 +131,8 @@
         android:text="SPORT"
         android:id="@+id/sportButton"
         android:textSize="21sp"
-        android:layout_alignTop="@+id/locationButton"
-        android:layout_alignLeft="@+id/askButton"
-        android:layout_alignStart="@+id/askButton" />
+        android:layout_alignTop="@+id/colorButton"
+        android:layout_alignLeft="@+id/animalButton"
+        android:layout_alignStart="@+id/animalButton" />
 
 </RelativeLayout>

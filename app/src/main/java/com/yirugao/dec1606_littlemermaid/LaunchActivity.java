@@ -12,7 +12,7 @@ public class LaunchActivity extends Activity implements View.OnClickListener {
     /*Declaration Button and Label View variable*/
     Button nextButton,startButton,exitButton;
     Button foodLabel,weatherLabel,questionLabel,greetingLabel,feelingLabel,
-            askingLabel,bodyLabel,locationLabel,sportLabel;
+            animalLabel,bodyLabel,colorLabel,sportLabel;
 
     /*Testing remove later*/
     String toastMessage = "";
@@ -33,9 +33,9 @@ public class LaunchActivity extends Activity implements View.OnClickListener {
         questionLabel = (Button) findViewById(R.id.questionButton);
         greetingLabel = (Button) findViewById(R.id.greetingButton);
         feelingLabel = (Button) findViewById(R.id.feelingButton);
-        askingLabel = (Button) findViewById(R.id.askButton);
+        animalLabel = (Button) findViewById(R.id.animalButton);
         bodyLabel = (Button) findViewById(R.id.bodyButton);
-        locationLabel = (Button) findViewById(R.id.locationButton);
+        colorLabel = (Button) findViewById(R.id.colorButton);
         sportLabel = (Button) findViewById(R.id.sportButton);
 
         /*setup the listener*/
@@ -48,9 +48,9 @@ public class LaunchActivity extends Activity implements View.OnClickListener {
         questionLabel.setOnClickListener(this);
         greetingLabel.setOnClickListener(this);
         feelingLabel.setOnClickListener(this);
-        askingLabel.setOnClickListener(this);
+        animalLabel.setOnClickListener(this);
         bodyLabel.setOnClickListener(this);
-        locationLabel.setOnClickListener(this);
+        colorLabel.setOnClickListener(this);
         sportLabel.setOnClickListener(this);
 
     }
@@ -62,31 +62,31 @@ public class LaunchActivity extends Activity implements View.OnClickListener {
         switch (v.getId()){
 
             case R.id.foodButton:
-                toastMessage = "food ";
+                toastMessage = "food";
                 break;
             case R.id.weatherButton:
-                toastMessage = "weather ";
+                toastMessage = "weather";
                 break;
             case R.id.questionButton:
-                toastMessage = "question ";
+                toastMessage = "question";
                 break;
             case R.id.greetingButton:
-                toastMessage = "greeting ";
+                toastMessage = "greeting";
                 break;
             case R.id.feelingButton:
-                toastMessage = "feeling ";
+                toastMessage = "feeling";
                 break;
-            case R.id.askButton:
-                toastMessage = "ask ";
+            case R.id.animalButton:
+                toastMessage = "animal";
                 break;
             case R.id.bodyButton:
-                toastMessage = "body ";
+                toastMessage = "body";
                 break;
-            case R.id.locationButton:
-                toastMessage = "location ";
+            case R.id.colorButton:
+                toastMessage = "color";
                 break;
             case R.id.sportButton:
-                toastMessage = "sport ";
+                toastMessage = "sport";
                 break;
             case R.id.nextButton:
                 Toast.makeText(getApplicationContext(), "This is no current next category", Toast.LENGTH_SHORT).show();

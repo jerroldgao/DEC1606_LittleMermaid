@@ -12,6 +12,17 @@ import android.widget.Toast;
 
 public class ReceiveActivity extends Activity implements View.OnClickListener{
 
+    /*Fix data string array, this will become the local database later on*/
+    String[] foodTitle = { "Pie", "Apple", "Steak", "Bacon", "Banana", "Hot Dog","Ice Cream","Cookies","Candy","Orange"};
+    String[] weatherTitle = { "Rain", "Snow", "Cloudy", "Party Cloudy", "Thunder Storms", "Windy","Drizzle","Flurries","Haze"};
+    String[] questionTitle = { "What", "Where", "Who", "How", "Why", "When","What's up","How old","What time"};
+    String[] greetingTitle = { "Hey", "Hi", "Good morning", "Good afternoon", "Good night", "Bye","See ya","Nice to see you","Nice to meet you"};
+    String[] animalTitle = { "Fish", "Dog", "Cat", "Bird", "Pig", "Horse","Lamb","Donkey","Tiger"};
+    String[] feelingTitle = { "Boring", "Exciting", "Sad", "Love", "Angry", "Happy","Surprise","Disgusted","Afraid"};
+    String[] bodyTitle = { "Head", "Ear", "Neck", "Hand", "Foot", "Arm","Leg","Nose","Teeth"};
+    String[] colorTitle = { "Red", "Purple", "Yellow", "Pink", "White", "Black","Blue","Green","Brown"};
+    String[] sportTitle = { "Basketball", "Baseball", "Football", "Soccer", "Swimming", "Tennis","Ping Pong","Running","Hiking"};
+
     /*Declaration Button variable*/
     Button nextWordButton,returnButton;
     /*Declaration text View variable*/
@@ -55,7 +66,40 @@ public class ReceiveActivity extends Activity implements View.OnClickListener{
             if( buttonsInRow < 3 ){
                 Button bb = new Button( this );
                 row.addView( bb, 350, 220 );
-                bb.setText(id + index);
+                //check the relevant title array
+                switch(id){
+                    //close return the launch the activity
+                    case "food":
+                        bb.setText(foodTitle[index]);
+                        break;
+                    case "weather":
+                        bb.setText(weatherTitle[index]);
+                        break;
+                    case "question":
+                        bb.setText(questionTitle[index]);
+                        break;
+                    case "greeting":
+                        bb.setText(greetingTitle[index]);
+                        break;
+                    case "feeling":
+                        bb.setText(feelingTitle[index]);
+                        break;
+                    case "animal":
+                        bb.setText(animalTitle[index]);
+                        break;
+                    case "body":
+                        bb.setText(bodyTitle[index]);
+                        break;
+                    case "color":
+                        bb.setText(colorTitle[index]);
+                        break;
+                    case "sport":
+                        bb.setText(sportTitle[index]);
+                        break;
+                    default:
+                        bb.setText("no data");
+                        break;
+                }
             }
         }
 
@@ -69,7 +113,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener{
         //define the button that has been clicked and perform the corresponding user selected
         switch (v.getId()){
 
-            //close current activity and return the launch the activity
+            //close return the launch the activity
             case R.id.returnButton:
                 this.finish();
                 break;
