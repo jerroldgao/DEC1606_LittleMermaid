@@ -2,6 +2,7 @@ package com.yirugao.dec1606_littlemermaid;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +17,9 @@ public class LaunchActivity extends Activity implements View.OnClickListener {
 
     /*Testing remove later*/
     String toastMessage = "";
+
+    Boolean isClickedDummy; // global after the declaration of your class
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,7 @@ public class LaunchActivity extends Activity implements View.OnClickListener {
         colorLabel.setOnClickListener(this);
         sportLabel.setOnClickListener(this);
 
+        isClickedDummy = true; // in your onCreate()
     }
 
     @Override
@@ -115,6 +120,22 @@ public class LaunchActivity extends Activity implements View.OnClickListener {
             i.putExtra("word", toastMessage);
             startActivity(i);
         }
+    }
+
+
+    //color change when user press
+    private void setupButtonColor(Button button, final Boolean isClicked) {
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if(isClickedDummy) {
+                    v.setBackgroundColor(Color.parseColor("#FF0000"));
+                    isClickedDummy = false;
+                } else {
+                    v.setBackgroundColor(Color.parseColor("#FFFFFF"));
+                    isClickedDummy = true;
+                }
+            }
+        });
     }
 
 }

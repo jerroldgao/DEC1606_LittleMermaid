@@ -24,6 +24,9 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
     //status check code
     private int MY_DATA_CHECK_CODE = 0;
 
+    //String value
+    private String aStringValue;
+
     /*Fix data string array, this will become the local database later on*/
     String[] foodTitle = { "Pie", "Apple", "Steak", "Bacon", "Banana", "Hot Dog","Ice Cream","Cookies","Candy","Orange"};
     String[] weatherTitle = { "Rain", "Snow", "Cloudy", "Party Cloudy", "Thunder Storms", "Windy","Drizzle","Flurries","Haze"};
@@ -36,7 +39,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
     String[] sportTitle = { "Basketball", "Baseball", "Football", "Soccer", "Swimming", "Tennis","Ping Pong","Running","Hiking"};
 
     /*Declaration Button variable*/
-    private Button nextWordButton,returnButton,speakButton;
+    private Button nextWordButton,returnButton,speakButton,clearButton;
 
     /*Declaration text View variable*/
     private TextView selfTextWordView;
@@ -54,11 +57,14 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
         checkTextToSpeechIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkTextToSpeechIntent, MY_DATA_CHECK_CODE);
 
+        //String value for add more word
+        aStringValue = "";
 
          /*Assign associate navigation ID to the button variable*/
         nextWordButton = (Button) findViewById(R.id.nextWordButton);
         returnButton = (Button) findViewById(R.id.returnButton);
         speakButton = (Button) findViewById(R.id.speakButton);
+        clearButton = (Button) findViewById(R.id.clearButton);
 
         /*Assign associate ID  to the text view variable*/
         selfTextWordView = (TextView) findViewById(R.id.selfTextWordView);
@@ -90,7 +96,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
                 }
                 if( buttonsInRow < 3 ){
                     final Button bb = new Button( this );
-                    row.addView( bb, 350, 220 );
+                    row.addView( bb, 250, 200 );
                     //check the relevant title array
                     switch(id){
                         //close return the launch the activity
@@ -98,7 +104,8 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
                             bb.setText(foodTitle[index]);
                             bb.setOnClickListener(new View.OnClickListener() {
                                 public void onClick(View v) {
-                                    selfTextWordView.setText(bb.getText());
+                                   // selfTextWordView.setText(bb.getText());
+                                    setTextToView(bb);
                                 }
                             });
                             break;
@@ -106,7 +113,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
                             bb.setText(weatherTitle[index]);
                             bb.setOnClickListener(new View.OnClickListener() {
                                 public void onClick(View v) {
-                                    selfTextWordView.setText(bb.getText());
+                                    setTextToView(bb);
                                 }
                             });
                             break;
@@ -114,7 +121,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
                             bb.setText(questionTitle[index]);
                             bb.setOnClickListener(new View.OnClickListener() {
                                 public void onClick(View v) {
-                                    selfTextWordView.setText(bb.getText());
+                                    setTextToView(bb);
                                 }
                             });
                             break;
@@ -122,7 +129,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
                             bb.setText(greetingTitle[index]);
                             bb.setOnClickListener(new View.OnClickListener() {
                                 public void onClick(View v) {
-                                    selfTextWordView.setText(bb.getText());
+                                    setTextToView(bb);
                                 }
                             });
                             break;
@@ -130,7 +137,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
                             bb.setText(feelingTitle[index]);
                             bb.setOnClickListener(new View.OnClickListener() {
                                 public void onClick(View v) {
-                                    selfTextWordView.setText(bb.getText());
+                                    setTextToView(bb);
                                 }
                             });
                             break;
@@ -138,7 +145,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
                             bb.setText(animalTitle[index]);
                             bb.setOnClickListener(new View.OnClickListener() {
                                 public void onClick(View v) {
-                                    selfTextWordView.setText(bb.getText());
+                                    setTextToView(bb);
                                 }
                             });
                             break;
@@ -146,7 +153,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
                             bb.setText(bodyTitle[index]);
                             bb.setOnClickListener(new View.OnClickListener() {
                                 public void onClick(View v) {
-                                    selfTextWordView.setText(bb.getText());
+                                    setTextToView(bb);
                                 }
                             });
                             break;
@@ -154,7 +161,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
                             bb.setText(colorTitle[index]);
                             bb.setOnClickListener(new View.OnClickListener() {
                                 public void onClick(View v) {
-                                    selfTextWordView.setText(bb.getText());
+                                    setTextToView(bb);
                                 }
                             });
                             break;
@@ -162,7 +169,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
                             bb.setText(sportTitle[index]);
                             bb.setOnClickListener(new View.OnClickListener() {
                                 public void onClick(View v) {
-                                    selfTextWordView.setText(bb.getText());
+                                    setTextToView(bb);
                                 }
                             });
                             break;
@@ -188,6 +195,19 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
         nextWordButton.setOnClickListener(this);
         returnButton.setOnClickListener(this);
         speakButton.setOnClickListener(this);
+
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selfTextWordView.setText("");
+                aStringValue = "";
+            }
+        });
+    }
+
+    private void setTextToView(Button bb) {
+        aStringValue += bb.getText() + " ";
+        selfTextWordView.setText(aStringValue);
     }
 
     private void promptSpeechInput() {
@@ -273,4 +293,8 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
             Toast.makeText(this, "Speech failed...", Toast.LENGTH_LONG).show();
         }
     }
+
+
+
+
 }
