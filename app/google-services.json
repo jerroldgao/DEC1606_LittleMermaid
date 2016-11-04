@@ -1,0 +1,86 @@
+{
+  "project_info": {
+    "project_number": "24584211319",
+    "firebase_url": "https://littlemermaid.firebaseio.com",
+    "project_id": "firebase-littlemermaid",
+    "storage_bucket": "firebase-littlemermaid.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:24584211319:android:e6812123933383f4",
+        "android_client_info": {
+          "package_name": "project.littlemermaid_v6"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "24584211319-fdp7pbggftqofil6pp18lvo98t22kfsg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "project.littlemermaid_v6",
+            "certificate_hash": "1799BE9AF6691BC88182429184883E8B5DF697CB"
+          }
+        },
+        {
+          "client_id": "24584211319-i40mh7u12g680h5jvauai593tg6o4p23.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPgsU3SeGRsCTWM3qbHr57FiQ199D8DHA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "24584211319-i40mh7u12g680h5jvauai593tg6o4p23.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:24584211319:android:3838bb1b73fe7ceb",
+        "android_client_info": {
+          "package_name": "com.yirugao.dec1606_littlemermaid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "24584211319-i40mh7u12g680h5jvauai593tg6o4p23.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPgsU3SeGRsCTWM3qbHr57FiQ199D8DHA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
