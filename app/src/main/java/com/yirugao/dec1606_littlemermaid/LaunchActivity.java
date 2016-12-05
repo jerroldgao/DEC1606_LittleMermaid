@@ -6,17 +6,35 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.Toast;
+
+import com.firebase.client.Firebase;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class LaunchActivity extends Activity implements View.OnClickListener {
 
     /*Declaration Button and Label View variable*/
     Button nextButton,startButton,exitButton;
-    Button foodLabel,weatherLabel,questionLabel,greetingLabel,feelingLabel,
-            animalLabel,bodyLabel,colorLabel,sportLabel;
 
-    /*Testing remove later*/
-    String toastMessage = "";
+    /*Display button topic*/
+    ArrayList<String> btnDisplay;
+
+    /*Button Selection */
+    HashSet<String> setSelected;
+    //ArrayList<String> setSelected;
+
+    HashMap<String, Set<String>> topic;
 
     Boolean isClickedDummy; // global after the declaration of your class
 
@@ -31,33 +49,63 @@ public class LaunchActivity extends Activity implements View.OnClickListener {
         startButton = (Button) findViewById(R.id.startButton);
         exitButton = (Button) findViewById(R.id.exitButton);
 
-        /*Assign associate ID category to the button variable*/
-        foodLabel = (Button) findViewById(R.id.foodButton);
-        weatherLabel = (Button) findViewById(R.id.weatherButton);
-        questionLabel = (Button) findViewById(R.id.questionButton);
-        greetingLabel = (Button) findViewById(R.id.greetingButton);
-        feelingLabel = (Button) findViewById(R.id.feelingButton);
-        animalLabel = (Button) findViewById(R.id.animalButton);
-        bodyLabel = (Button) findViewById(R.id.bodyButton);
-        colorLabel = (Button) findViewById(R.id.colorButton);
-        sportLabel = (Button) findViewById(R.id.sportButton);
-
         /*setup the listener*/
         nextButton.setOnClickListener(this);
         startButton.setOnClickListener(this);
         exitButton.setOnClickListener(this);
 
-        foodLabel.setOnClickListener(this);
-        weatherLabel.setOnClickListener(this);
-        questionLabel.setOnClickListener(this);
-        greetingLabel.setOnClickListener(this);
-        feelingLabel.setOnClickListener(this);
-        animalLabel.setOnClickListener(this);
-        bodyLabel.setOnClickListener(this);
-        colorLabel.setOnClickListener(this);
-        sportLabel.setOnClickListener(this);
+        //Hash map for topic
+        topic = new HashMap<String, Set<String>>();
 
-        isClickedDummy = true; // in your onCreate()
+        //topic display on btn
+        btnDisplay = new ArrayList<String>();
+
+        //topic get selected
+        setSelected = new HashSet<>();
+        //setSelected = new ArrayList<>();
+
+        //read file from csv
+        String line;
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(getAssets().open("Dec1606Lexicons.csv")));
+            while((line = br.readLine())!= null){
+
+                String[] words = line.split(",");
+
+                HashSet<String> set = new HashSet<>();
+                for(int i = 1 ; i < words.length ; i++){
+                    set.add(words[i]);
+                }
+                topic.put(words[0].trim(),set);
+
+                //save all the topic
+                //topic.put(words[0],set_name);
+                System.out.println(topic);
+                //System.out.println(words.length);
+            }
+
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        /* go through each  */
+        String key = "";
+        //Get the set of key from hashmap
+        Set setOfKeys = topic.keySet();
+        //get the iterator instance from set
+        Iterator iterator = setOfKeys.iterator();
+        while (iterator.hasNext()) {
+            key = (String) iterator.next();
+            btnDisplay.add(key);
+            System.out.println("Key: "+ btnDisplay);
+        }
+
+        //Topic Btn display
+        categoryDisplay();
+
     }
 
     @Override
@@ -66,38 +114,22 @@ public class LaunchActivity extends Activity implements View.OnClickListener {
         //define the button that has been clicked and perform the corresponding user selected
         switch (v.getId()){
 
-            case R.id.foodButton:
-                toastMessage = "food";
-                break;
-            case R.id.weatherButton:
-                toastMessage = "weather";
-                break;
-            case R.id.questionButton:
-                toastMessage = "question";
-                break;
-            case R.id.greetingButton:
-                toastMessage = "greeting";
-                break;
-            case R.id.feelingButton:
-                toastMessage = "feeling";
-                break;
-            case R.id.animalButton:
-                toastMessage = "animal";
-                break;
-            case R.id.bodyButton:
-                toastMessage = "body";
-                break;
-            case R.id.colorButton:
-                toastMessage = "color";
-                break;
-            case R.id.sportButton:
-                toastMessage = "sport";
-                break;
             case R.id.nextButton:
-                Toast.makeText(getApplicationContext(), "This is no current next category", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "No current next category", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.startButton:
-                launchCategory();
+                if(setSelected.size() == 0){
+                    Toast.makeText(getApplicationContext(), "Please selected category", Toast.LENGTH_SHORT).show();
+                }else {
+                    //send the value to the receive
+                    Intent intent = new Intent(LaunchActivity.this, ReceiveActivity.class);
+                    intent.putExtra("Topic",setSelected);
+                    //start send
+                    startActivity(intent);
+
+                    //reset the string
+                    setSelected.clear();
+                }
                 break;
             case R.id.exitButton:
                 this.finish();
@@ -107,35 +139,53 @@ public class LaunchActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    /*Launch Button method:
-        * Return error message if user has no selected any id label
-        * Return selected id message
-        * */
-    public void launchCategory(){
-        if (toastMessage.equals("")){
-            Toast.makeText(getApplicationContext(), "Please selected the category", Toast.LENGTH_SHORT).show();
-        }else{
-            Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(LaunchActivity.this, ReceiveActivity.class);
-            i.putExtra("word", toastMessage);
-            startActivity(i);
+    //Topic display
+    private void categoryDisplay() {
+
+        try{
+            //create the 9 X 9 buttons on the table layout with correspond word
+            for(int index = 0; index < 9; index++){
+
+                TableLayout table = (TableLayout) findViewById( R.id.topicLayout);
+
+                int buttonsInRow = 0;
+                int numRows = table.getChildCount();
+                TableRow row = null;
+                if( numRows > 0 ){
+                    row = (TableRow) table.getChildAt( numRows - 1 );
+                    buttonsInRow = row.getChildCount();
+                }
+
+                if( numRows == 0 || buttonsInRow == 3 ){
+                    row = new TableRow( this );
+                    table.addView( row );
+                    buttonsInRow = 0;
+                }
+                if( buttonsInRow < 3 ){
+                    Button bb = new Button( this );
+                    bb.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Button button = (Button) view;
+                            String selectedText = button.getText().toString();
+                            //user selected the button add to the array list
+                            if (topic.containsKey(selectedText)){
+                                setSelected.addAll(topic.get(selectedText));
+                                //System.out.println(topic.get(selectedText));
+                                System.out.println(setSelected.toString());
+                            }
+                            //Toast.makeText(getApplicationContext(), selectedText, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    row.addView( bb, 450, 350 );
+                    bb.setText(btnDisplay.get(index));
+                }
+            }
+
+        }catch (NullPointerException e){
+
         }
     }
 
-
-    //color change when user press
-    private void setupButtonColor(Button button, final Boolean isClicked) {
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if(isClickedDummy) {
-                    v.setBackgroundColor(Color.parseColor("#FF0000"));
-                    isClickedDummy = false;
-                } else {
-                    v.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                    isClickedDummy = true;
-                }
-            }
-        });
-    }
 
 }

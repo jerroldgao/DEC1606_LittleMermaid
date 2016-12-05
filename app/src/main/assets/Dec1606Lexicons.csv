@@ -1,0 +1,9 @@
+Measurement,Quantity ,Change ,Object ,,,
+Location,Location ,Stative ,Object ,Artifact,Change ,
+Food,Food ,Consumption ,Creation ,Group ,,
+Bodily care,body,body ,person ,,,
+Socializing,person ,social ,communication ,group,communication ,
+Movement,motion ,contact ,location ,body,person ,
+Weather,weather ,time ,phenomenon ,change ,,
+Sports ,compeition ,body,person ,motion ,stative ,contact
+Thoughts/Thinking,cognition,cognition ,communication ,emotion ,motive ,feeling

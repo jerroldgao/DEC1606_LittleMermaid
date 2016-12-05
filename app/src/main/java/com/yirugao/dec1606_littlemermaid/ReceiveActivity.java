@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TableLayout;
@@ -14,8 +15,23 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.PriorityQueue;
+
+import static android.R.attr.data;
 
 public class ReceiveActivity extends Activity implements View.OnClickListener, TextToSpeech.OnInitListener{
 
@@ -27,17 +43,6 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
     //String value
     private String aStringValue;
 
-    /*Fix data string array, this will become the local database later on*/
-    String[] foodTitle = { "Pie", "Apple", "Steak", "Bacon", "Banana", "Hot Dog","Ice Cream","Cookies","Candy","Orange"};
-    String[] weatherTitle = { "Rain", "Snow", "Cloudy", "Party Cloudy", "Thunder Storms", "Windy","Drizzle","Flurries","Haze"};
-    String[] questionTitle = { "What", "Where", "Who", "How", "Why", "When","What's up","How old","What time"};
-    String[] greetingTitle = { "Hey", "Hi", "Good morning", "Good afternoon", "Good night", "Bye","See ya","Nice to see you","Nice to meet you"};
-    String[] animalTitle = { "Fish", "Dog", "Cat", "Bird", "Pig", "Horse","Lamb","Donkey","Tiger"};
-    String[] feelingTitle = { "Boring", "Exciting", "Sad", "Love", "Angry", "Happy","Surprise","Disgusted","Afraid"};
-    String[] bodyTitle = { "Head", "Ear", "Neck", "Hand", "Foot", "Arm","Leg","Nose","Teeth"};
-    String[] colorTitle = { "Red", "Purple", "Yellow", "Pink", "White", "Black","Blue","Green","Brown"};
-    String[] sportTitle = { "Basketball", "Baseball", "Football", "Soccer", "Swimming", "Tennis","Ping Pong","Running","Hiking"};
-
     /*Declaration Button variable*/
     private Button nextWordButton,returnButton,speakButton,clearButton;
 
@@ -47,11 +52,25 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
     private final int REQ_CODE_SPEECH_INPUT = 100;
     // Declare the voice recognizer
     private Button btnSpeak;
+
+    /* Firebase*/
+    private Firebase aRef;
+
+    private HashSet<String> setSelected;
+
+    private HashMap<String,HashMap<String,Integer>> lemmaStored;
+    private HashMap<String,Integer> cateSumMap;
+
+    private PriorityQueue<String> words;
+
+    private ArrayList<String> dataRetrieve;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receive);
 
+        Firebase.setAndroidContext(this);
         //check for Text to speech data
         Intent checkTextToSpeechIntent = new Intent();
         checkTextToSpeechIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
@@ -70,118 +89,98 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
         selfTextWordView = (TextView) findViewById(R.id.selfTextWordView);
         voiceTextWordView = (TextView) findViewById(R.id.voiceTextWordView);
 
-        //fetch the single string value from launch activity
+
+        dataRetrieve = new ArrayList<>();
+
+        /* Get the user selected value from category page*/
         Intent intent = getIntent();
-        try {
-            String id = intent.getExtras().getString("word");
-            //set the new string text on the text view
-            //selfTextWordView.setText(id);
+        setSelected = (HashSet<String>) intent.getSerializableExtra("Topic");
+        System.out.println("-From other activity---" + setSelected);
 
-            //create the 9 X 9 buttons on the table layout with correspond word
-            for(int index = 0; index < 9; index++){
-                TableLayout table = (TableLayout) findViewById( R.id.buttonLayout );
+        //
+        cateSumMap = new HashMap<String, Integer>();
 
-                int buttonsInRow = 0;
-                int numRows = table.getChildCount();
-                TableRow row = null;
-                if( numRows > 0 ){
-                    row = (TableRow) table.getChildAt( numRows - 1 );
-                    buttonsInRow = row.getChildCount();
+        //
+        lemmaStored = new HashMap<String,HashMap<String, Integer>>();
+
+        //topic get selected
+        setSelected = new HashSet<>();
+
+        aRef = new Firebase("https://littlemermaid.firebaseio.com/dictionary/");
+
+        aRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                //test if connect to the database
+                //Log.e("Count---- " ,""+dataSnapshot.getChildrenCount());
+                for (DataSnapshot ds : dataSnapshot.getChildren() ){
+
+                    dataRetrieve.add(ds.getValue().toString());
+                    //System.out.println(ds.getValue().toString());
                 }
 
-                if( numRows == 0 || buttonsInRow == 3 ){
-                    row = new TableRow( this );
-                    table.addView( row );
-                    buttonsInRow = 0;
+                System.out.println(dataRetrieve.get(0));
+
+
+                /*
+                //word
+                for (String setVal : setSelected) {
+                    //                    if (setVal.equals("Food")) {
+                    //                        System.out.println(setVal);
+                    //                    }else {
+                    //                        System.out.println(setVal);
+                    //                    }
+                    setVal = setVal.trim();
+                    //System.out.println(dataSnapshot.child("lemma").getValue()+"----"+dataSnapshot.child(setVal.trim()).getValue());
+                    if(!lemmaStored.containsKey(setVal)){
+                        lemmaStored.put(setVal, new HashMap<String,Integer>());
+                    }
+                    if (!lemmaStored.get(setVal).containsKey(dataSnapshot.child("lemma").getValue())){
+                        lemmaStored.get(setVal).put(dataSnapshot.child("lemma").getValue().toString(),Integer.parseInt(dataSnapshot.child(setVal).getValue().toString()));
+                    }
+
                 }
-                if( buttonsInRow < 3 ){
-                    final Button bb = new Button( this );
-                    row.addView( bb, 250, 200 );
-                    //check the relevant title array
-                    switch(id){
-                        //close return the launch the activity
-                        case "food":
-                            bb.setText(foodTitle[index]);
-                            bb.setOnClickListener(new View.OnClickListener() {
-                                public void onClick(View v) {
-                                   // selfTextWordView.setText(bb.getText());
-                                    setTextToView(bb);
-                                }
-                            });
-                            break;
-                        case "weather":
-                            bb.setText(weatherTitle[index]);
-                            bb.setOnClickListener(new View.OnClickListener() {
-                                public void onClick(View v) {
-                                    setTextToView(bb);
-                                }
-                            });
-                            break;
-                        case "question":
-                            bb.setText(questionTitle[index]);
-                            bb.setOnClickListener(new View.OnClickListener() {
-                                public void onClick(View v) {
-                                    setTextToView(bb);
-                                }
-                            });
-                            break;
-                        case "greeting":
-                            bb.setText(greetingTitle[index]);
-                            bb.setOnClickListener(new View.OnClickListener() {
-                                public void onClick(View v) {
-                                    setTextToView(bb);
-                                }
-                            });
-                            break;
-                        case "feeling":
-                            bb.setText(feelingTitle[index]);
-                            bb.setOnClickListener(new View.OnClickListener() {
-                                public void onClick(View v) {
-                                    setTextToView(bb);
-                                }
-                            });
-                            break;
-                        case "animal":
-                            bb.setText(animalTitle[index]);
-                            bb.setOnClickListener(new View.OnClickListener() {
-                                public void onClick(View v) {
-                                    setTextToView(bb);
-                                }
-                            });
-                            break;
-                        case "body":
-                            bb.setText(bodyTitle[index]);
-                            bb.setOnClickListener(new View.OnClickListener() {
-                                public void onClick(View v) {
-                                    setTextToView(bb);
-                                }
-                            });
-                            break;
-                        case "color":
-                            bb.setText(colorTitle[index]);
-                            bb.setOnClickListener(new View.OnClickListener() {
-                                public void onClick(View v) {
-                                    setTextToView(bb);
-                                }
-                            });
-                            break;
-                        case "sport":
-                            bb.setText(sportTitle[index]);
-                            bb.setOnClickListener(new View.OnClickListener() {
-                                public void onClick(View v) {
-                                    setTextToView(bb);
-                                }
-                            });
-                            break;
-                        default:
-                            bb.setText("no data");
-                            break;
+                System.out.println(lemmaStored.get("Food").size());
+
+                Iterator<String> iterator = setSelected.iterator();
+                String firstCate = iterator.next().trim();
+//                System.out.println(firstCate);
+                for(HashMap.Entry<String,Integer> lemmaValue: lemmaStored.get(firstCate).entrySet()){
+                    cateSumMap.put(lemmaValue.getKey(),lemmaValue.getValue());
+                    System.out.println(lemmaValue.getKey()+" : " +lemmaValue.getValue());
+                }
+                while (iterator.hasNext()){
+                    String cate = iterator.next().trim();
+                    for(HashMap.Entry<String,Integer> lemmaValue: lemmaStored.get(cate).entrySet()){
+                        cateSumMap.put(lemmaValue.getKey(),cateSumMap.get(lemmaValue.getKey())+lemmaValue.getValue());
                     }
                 }
-            }
-        } catch (NullPointerException e){
+//                System.out.println(cateSumMap.size());
+//                words = new PriorityQueue<String>(cateSumMap.size(),new Comparator<String>() {
+//                    @Override
+//                    public int compare(String s, String t1) {
+//                        return cateSumMap.get(t1)-cateSumMap.get(s);
+//                    }
+//                });
+//                words.addAll(cateSumMap.keySet());
 
-        }
+//                while (words.size() > 0) {
+//                    System.out.println(words.poll());
+//                }
+                //Comparator comp = words.comparator();
+                */
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+
+
         btnSpeak = (Button) findViewById(R.id.listenButton);
         btnSpeak.setOnClickListener(new View.OnClickListener() {
 
@@ -203,7 +202,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
                 aStringValue = "";
             }
         });
-    }
+    }  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// OnCreated  method end ////////////////////////////////////////////////////////////
 
     private void setTextToView(Button bb) {
         aStringValue += bb.getText() + " ";

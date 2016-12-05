@@ -10,7 +10,6 @@
     tools:context="com.yirugao.dec1606_littlemermaid.LaunchActivity">
 
     <Button
-        android:layout_width="180dp"
         android:layout_height="60dp"
         android:text="Next"
         android:id="@+id/nextButton"
@@ -18,121 +17,43 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="128dp" />
+        android:layout_marginTop="128dp"
+        android:layout_width="120dp" />
 
     <Button
-        android:layout_width="180dp"
         android:layout_height="60dp"
         android:text="Launch"
         android:id="@+id/startButton"
         android:textSize="18sp"
         android:layout_below="@+id/nextButton"
         android:layout_alignLeft="@+id/nextButton"
-        android:layout_alignStart="@+id/nextButton" />
+        android:layout_alignStart="@+id/nextButton"
+        android:layout_width="120dp" />
 
     <Button
-        android:layout_width="180dp"
         android:layout_height="60dp"
         android:text="Exit"
         android:id="@+id/exitButton"
         android:textSize="18sp"
         android:layout_below="@+id/startButton"
         android:layout_alignLeft="@+id/startButton"
-        android:layout_alignStart="@+id/startButton" />
+        android:layout_alignStart="@+id/startButton"
+        android:layout_width="120dp" />
 
-    <Button
-        android:layout_width="155dp"
-        android:layout_height="90dp"
-        android:text="FOOD"
-        android:id="@+id/foodButton"
-        android:textSize="21sp"
-        android:layout_above="@+id/startButton"
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="61dp" />
+        android:layout_marginLeft="9dp"
+        android:layout_marginStart="9dp"
+        android:id="@+id/topicLayout"
+        android:layout_marginTop="50dp"
+        android:layout_toLeftOf="@+id/nextButton"
+        android:layout_toStartOf="@+id/nextButton">
 
-    <Button
-        android:layout_width="155dp"
-        android:layout_height="90dp"
-        android:text="WEATHERS"
-        android:id="@+id/weatherButton"
-        android:textSize="21sp"
-        android:layout_marginLeft="55dp"
-        android:layout_marginStart="55dp"
-        android:layout_alignTop="@+id/foodButton"
-        android:layout_toRightOf="@+id/foodButton"
-        android:layout_toEndOf="@+id/foodButton" />
+    </TableLayout>
 
-    <Button
-        android:layout_width="155dp"
-        android:layout_height="90dp"
-        android:text="QUESTION"
-        android:id="@+id/questionButton"
-        android:textSize="21sp"
-        android:layout_marginLeft="55dp"
-        android:layout_marginStart="55dp"
-        android:layout_alignTop="@+id/weatherButton"
-        android:layout_toRightOf="@+id/weatherButton"
-        android:layout_toEndOf="@+id/weatherButton" />
-
-    <Button
-        android:layout_width="155dp"
-        android:layout_height="90dp"
-        android:text="GREETING"
-        android:id="@+id/greetingButton"
-        android:textSize="21sp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="155dp"
-        android:layout_height="90dp"
-        android:text="FEELING"
-        android:id="@+id/feelingButton"
-        android:textSize="21sp"
-        android:layout_alignTop="@+id/greetingButton"
-        android:layout_toLeftOf="@+id/questionButton"
-        android:layout_toStartOf="@+id/questionButton" />
-
-    <Button
-        android:layout_width="155dp"
-        android:layout_height="90dp"
-        android:text="ANIMAL"
-        android:id="@+id/animalButton"
-        android:textSize="21sp"
-        android:layout_alignTop="@+id/feelingButton"
-        android:layout_alignLeft="@+id/questionButton"
-        android:layout_alignStart="@+id/questionButton" />
-
-    <Button
-        android:layout_width="155dp"
-        android:layout_height="90dp"
-        android:text="BODY"
-        android:id="@+id/bodyButton"
-        android:textSize="21sp"
-        android:layout_below="@+id/exitButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="155dp"
-        android:layout_height="90dp"
-        android:text="COLOR"
-        android:id="@+id/colorButton"
-        android:textSize="21sp"
-        android:layout_alignTop="@+id/bodyButton"
-        android:layout_alignLeft="@+id/feelingButton"
-        android:layout_alignStart="@+id/feelingButton" />
-
-    <Button
-        android:layout_width="155dp"
-        android:layout_height="90dp"
-        android:text="SPORT"
-        android:id="@+id/sportButton"
-        android:textSize="21sp"
-        android:layout_alignTop="@+id/colorButton"
-        android:layout_alignLeft="@+id/animalButton"
-        android:layout_alignStart="@+id/animalButton" />
 
 </RelativeLayout>
