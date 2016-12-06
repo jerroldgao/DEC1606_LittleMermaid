@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -63,8 +64,6 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
 
     private PriorityQueue<String> words;
 
-    private ArrayList<String> dataRetrieve;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,8 +89,6 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
         voiceTextWordView = (TextView) findViewById(R.id.voiceTextWordView);
 
 
-        dataRetrieve = new ArrayList<>();
-
         /* Get the user selected value from category page*/
         Intent intent = getIntent();
         setSelected = (HashSet<String>) intent.getSerializableExtra("Topic");
@@ -102,9 +99,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
 
         //
         lemmaStored = new HashMap<String,HashMap<String, Integer>>();
-
-        //topic get selected
-        setSelected = new HashSet<>();
+        
 
         aRef = new Firebase("https://littlemermaid.firebaseio.com/dictionary/");
 
@@ -112,66 +107,54 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                //test if connect to the database
-                //Log.e("Count---- " ,""+dataSnapshot.getChildrenCount());
-                for (DataSnapshot ds : dataSnapshot.getChildren() ){
 
-                    dataRetrieve.add(ds.getValue().toString());
-                    //System.out.println(ds.getValue().toString());
-                }
+                  for (DataSnapshot childSnapshot : dataSnapshot.getChildren() ){
 
-                System.out.println(dataRetrieve.get(0));
+                      for(String setVal : setSelected){
 
+                          //System.out.println(childSnapshot.child("lemma").getValue()+"---"+childSnapshot.child(setVal.trim()).getValue(String.class));
+                          setVal = setVal.trim();
 
-                /*
-                //word
-                for (String setVal : setSelected) {
-                    //                    if (setVal.equals("Food")) {
-                    //                        System.out.println(setVal);
-                    //                    }else {
-                    //                        System.out.println(setVal);
-                    //                    }
-                    setVal = setVal.trim();
-                    //System.out.println(dataSnapshot.child("lemma").getValue()+"----"+dataSnapshot.child(setVal.trim()).getValue());
-                    if(!lemmaStored.containsKey(setVal)){
-                        lemmaStored.put(setVal, new HashMap<String,Integer>());
+                          if(!lemmaStored.containsKey(setVal)){
+                            lemmaStored.put(setVal, new HashMap<String,Integer>());
+                          }
+                          if (!lemmaStored.get(setVal).containsKey(childSnapshot.child("lemma").getValue())){
+                            lemmaStored.get(setVal).put(childSnapshot.child("lemma").getValue().toString(),childSnapshot.child(setVal).getValue(Integer.class));
+                          }
+
+                      }
+
+                   }
+
+                    //System.out.println(lemmaStored.get("Food").toString());
+                    Iterator<String> iterator = setSelected.iterator();
+                    String firstCate = iterator.next().trim();
+                    for(HashMap.Entry<String,Integer> lemmaValue: lemmaStored.get(firstCate).entrySet()){
+                        cateSumMap.put(lemmaValue.getKey(),lemmaValue.getValue());
+                        //System.out.println(lemmaValue.getKey()+" : " +lemmaValue.getValue());
                     }
-                    if (!lemmaStored.get(setVal).containsKey(dataSnapshot.child("lemma").getValue())){
-                        lemmaStored.get(setVal).put(dataSnapshot.child("lemma").getValue().toString(),Integer.parseInt(dataSnapshot.child(setVal).getValue().toString()));
+                    while (iterator.hasNext()){
+                        String cate = iterator.next().trim();
+                        for(HashMap.Entry<String,Integer> lemmaValue: lemmaStored.get(cate).entrySet()){
+                            cateSumMap.put(lemmaValue.getKey(),cateSumMap.get(lemmaValue.getKey())+lemmaValue.getValue());
+                        }
                     }
+                    //System.out.println(cateSumMap.size());
+                    words = new PriorityQueue<String>(cateSumMap.size(),new Comparator<String>() {
+                        @Override
+                        public int compare(String s, String t1) {
+                            return cateSumMap.get(t1)-cateSumMap.get(s);
+                        }
+                    });
+                    words.addAll(cateSumMap.keySet());
 
+                            //System.out.println(words.size());
+                            /*
+                                                        while (words.size() > 0) {
+                                                            System.out.println(words.poll());
+                                                        }
+                                                        */
                 }
-                System.out.println(lemmaStored.get("Food").size());
-
-                Iterator<String> iterator = setSelected.iterator();
-                String firstCate = iterator.next().trim();
-//                System.out.println(firstCate);
-                for(HashMap.Entry<String,Integer> lemmaValue: lemmaStored.get(firstCate).entrySet()){
-                    cateSumMap.put(lemmaValue.getKey(),lemmaValue.getValue());
-                    System.out.println(lemmaValue.getKey()+" : " +lemmaValue.getValue());
-                }
-                while (iterator.hasNext()){
-                    String cate = iterator.next().trim();
-                    for(HashMap.Entry<String,Integer> lemmaValue: lemmaStored.get(cate).entrySet()){
-                        cateSumMap.put(lemmaValue.getKey(),cateSumMap.get(lemmaValue.getKey())+lemmaValue.getValue());
-                    }
-                }
-//                System.out.println(cateSumMap.size());
-//                words = new PriorityQueue<String>(cateSumMap.size(),new Comparator<String>() {
-//                    @Override
-//                    public int compare(String s, String t1) {
-//                        return cateSumMap.get(t1)-cateSumMap.get(s);
-//                    }
-//                });
-//                words.addAll(cateSumMap.keySet());
-
-//                while (words.size() > 0) {
-//                    System.out.println(words.poll());
-//                }
-                //Comparator comp = words.comparator();
-                */
-
-            }
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
