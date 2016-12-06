@@ -19,6 +19,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.firebase.client.utilities.Pair;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -61,7 +62,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
 
     private HashMap<String,HashMap<String,Integer>> lemmaStored;
     private HashMap<String,Integer> cateSumMap;
-
+    private HashMap<String,ArrayList<Pair<String,Integer>>> nGramValue;
     private PriorityQueue<String> words;
 
     @Override
@@ -109,21 +110,29 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
 
 
                   for (DataSnapshot childSnapshot : dataSnapshot.getChildren() ){
-
+                      String currentLemma =childSnapshot.child("lemma").getValue().toString();
                       for(String setVal : setSelected){
 
-                          //System.out.println(childSnapshot.child("lemma").getValue()+"---"+childSnapshot.child(setVal.trim()).getValue(String.class));
+//                          System.out.println(childSnapshot.child("lemma").getValue()+"---"+childSnapshot.child(setVal.trim()).getValue(String.class));
                           setVal = setVal.trim();
 
                           if(!lemmaStored.containsKey(setVal)){
                             lemmaStored.put(setVal, new HashMap<String,Integer>());
                           }
-                          if (!lemmaStored.get(setVal).containsKey(childSnapshot.child("lemma").getValue())){
-                            lemmaStored.get(setVal).put(childSnapshot.child("lemma").getValue().toString(),childSnapshot.child(setVal).getValue(Integer.class));
+                          if (!lemmaStored.get(setVal).containsKey(currentLemma)){
+                            lemmaStored.get(setVal).put(currentLemma,childSnapshot.child(setVal).getValue(Integer.class));
                           }
-
                       }
-
+                      if (!nGramValue.containsKey(currentLemma)){
+                          nGramValue.put(currentLemma,new ArrayList<Pair<String, Integer>>());
+                      }
+                      String line = childSnapshot.child("Ngram").getValue().toString();
+                      line.replaceAll("\\{\\}","");
+                      String[] terms = line.toLowerCase().split(",");
+                      for (String term: terms){
+                          String[] ngram = term.split(":");
+                          nGramValue.get(currentLemma).add(new Pair<String, Integer>(ngram[0],Integer.parseInt(ngram[1])));
+                      }
                    }
 
                     //System.out.println(lemmaStored.get("Food").toString());
@@ -149,11 +158,11 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
                     words.addAll(cateSumMap.keySet());
 
                             //System.out.println(words.size());
-                            /*
-                                                        while (words.size() > 0) {
-                                                            System.out.println(words.poll());
-                                                        }
-                                                        */
+
+                while (words.size() > 0) {
+                    System.out.println(words.poll());
+                }
+
                 }
 
             @Override
