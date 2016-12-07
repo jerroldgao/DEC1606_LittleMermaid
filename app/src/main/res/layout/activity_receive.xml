@@ -37,7 +37,7 @@
         android:layout_toLeftOf="@+id/nextWordButton"
         android:layout_toStartOf="@+id/nextWordButton"
         android:layout_alignParentBottom="true"
-        android:id="@+id/buttonLayout"
+        android:id="@+id/btnWord"
         android:layout_below="@+id/selfTextWordView"></TableLayout>
 
     <TextView
@@ -71,8 +71,8 @@
         android:id="@+id/listenButton"
         android:textSize="18sp"
         android:layout_below="@+id/nextWordButton"
-        android:layout_toRightOf="@+id/buttonLayout"
-        android:layout_toEndOf="@+id/buttonLayout" />
+        android:layout_toRightOf="@+id/btnWord"
+        android:layout_toEndOf="@+id/btnWord" />
 
     <Button
         android:layout_width="180dp"

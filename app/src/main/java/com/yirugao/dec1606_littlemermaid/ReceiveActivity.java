@@ -3,13 +3,16 @@ package com.yirugao.dec1606_littlemermaid;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
+import android.text.DynamicLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -19,7 +22,6 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.firebase.client.utilities.Pair;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -35,6 +37,7 @@ import java.util.Objects;
 import java.util.PriorityQueue;
 
 import static android.R.attr.data;
+import static android.R.interpolator.linear;
 
 public class ReceiveActivity extends Activity implements View.OnClickListener, TextToSpeech.OnInitListener{
 
@@ -61,9 +64,12 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
 
     private HashSet<String> setSelected;
 
+    private HashMap<String,HashMap<String,Integer>> lemmaStored;
     private HashMap<String,Integer> cateSumMap;
     private HashMap<String,ArrayList<Pair<String,Integer>>> nGramValue;
     private PriorityQueue<String> words;
+
+    private ArrayList<String> w ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +77,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
         setContentView(R.layout.activity_receive);
 
         Firebase.setAndroidContext(this);
+
         //check for Text to speech data
         Intent checkTextToSpeechIntent = new Intent();
         checkTextToSpeechIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
@@ -89,6 +96,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
         selfTextWordView = (TextView) findViewById(R.id.selfTextWordView);
         voiceTextWordView = (TextView) findViewById(R.id.voiceTextWordView);
 
+        w = new ArrayList<>();
 
         /* Get the user selected value from category page*/
         Intent intent = getIntent();
@@ -100,9 +108,10 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
 
         //
 
-        
 
         aRef = new Firebase("https://littlemermaid.firebaseio.com/dictionary/");
+
+        aRef.keepSynced(true);
 
         aRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -113,15 +122,16 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
                       String currentLemma =childSnapshot.child("lemma").getValue().toString();
                       for(String setVal : setSelected){
 
-//                          System.out.println(childSnapshot.child("lemma").getValue()+"---"+childSnapshot.child(setVal.trim()).getValue(String.class));
+                          //System.out.println(childSnapshot.child("lemma").getValue()+"---"+childSnapshot.child(setVal.trim()).getValue(String.class));
                           setVal = setVal.trim();
 
                           if(!lemmaStored.containsKey(setVal)){
                             lemmaStored.put(setVal, new HashMap<String,Integer>());
                           }
-                          if (!lemmaStored.get(setVal).containsKey(currentLemma)){
-                            lemmaStored.get(setVal).put(currentLemma,childSnapshot.child(setVal).getValue(Integer.class));
+                          if (!lemmaStored.get(setVal).containsKey(childSnapshot.child("lemma").getValue())){
+                            lemmaStored.get(setVal).put(childSnapshot.child("lemma").getValue().toString(),childSnapshot.child(setVal).getValue(Integer.class));
                           }
+
                       }
                       if (!nGramValue.containsKey(currentLemma)){
                           nGramValue.put(currentLemma,new ArrayList<Pair<String, Integer>>());
@@ -158,11 +168,11 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
                     words.addAll(cateSumMap.keySet());
 
                             //System.out.println(words.size());
-
-                while (words.size() > 0) {
-                    System.out.println(words.poll());
-                }
-
+                            /*
+                                                        while (words.size() > 0) {
+                                                            System.out.println(words.poll());
+                                                        }
+                                                        */
                 }
 
             @Override
@@ -290,6 +300,48 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
         }
     }
 
+
+    /*  Button Display */
+    public void wordButtonDisplay(ArrayList<String> ar) {
+
+
+        try{
+            //create the 9 X 9 buttons on the table layout with correspond word
+            for(int index = 0; index < ar.size(); index++){
+
+                TableLayout table = (TableLayout) findViewById( R.id.btnWord);
+
+                int buttonsInRow = 0;
+                int numRows = table.getChildCount();
+                TableRow row = null;
+                if( numRows > 0 ){
+                    row = (TableRow) table.getChildAt( numRows - 1 );
+                    buttonsInRow = row.getChildCount();
+                }
+
+                if( numRows == 0 || buttonsInRow == 4 ){
+                    row = new TableRow( this );
+                    table.addView( row );
+                    buttonsInRow = 0;
+                }
+                if( buttonsInRow < 4 ){
+                    Button bb = new Button( this );
+                    row.addView( bb, 400, 250 );
+                    bb.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            System.out.println();
+                        }
+                    });
+                    bb.setText(ar.get(index));
+                }
+            }
+
+        }catch (NullPointerException e){
+
+        }
+
+    }
 
 
 
