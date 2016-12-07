@@ -22,11 +22,11 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -66,7 +66,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
 
     private HashMap<String,HashMap<String,Integer>> lemmaStored;
     private HashMap<String,Integer> cateSumMap;
-
+    private HashMap<String,ArrayList<Pair<String,Integer>>> nGramValue;
     private PriorityQueue<String> words;
 
     private ArrayList<String> w ;
@@ -107,10 +107,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
         cateSumMap = new HashMap<String, Integer>();
 
         //
-        lemmaStored = new HashMap<String,HashMap<String, Integer>>();
 
-        //
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         aRef = new Firebase("https://littlemermaid.firebaseio.com/dictionary/");
 
@@ -120,9 +117,9 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-
+                HashMap<String,HashMap<String,Integer>> lemmaStored = new HashMap<String,HashMap<String, Integer>>();
                   for (DataSnapshot childSnapshot : dataSnapshot.getChildren() ){
-
+                      String currentLemma =childSnapshot.child("lemma").getValue().toString();
                       for(String setVal : setSelected){
 
                           //System.out.println(childSnapshot.child("lemma").getValue()+"---"+childSnapshot.child(setVal.trim()).getValue(String.class));
@@ -136,7 +133,16 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
                           }
 
                       }
-
+                      if (!nGramValue.containsKey(currentLemma)){
+                          nGramValue.put(currentLemma,new ArrayList<Pair<String, Integer>>());
+                      }
+                      String line = childSnapshot.child("Ngram").getValue().toString();
+                      line.replaceAll("\\{\\}","");
+                      String[] terms = line.toLowerCase().split(",");
+                      for (String term: terms){
+                          String[] ngram = term.split(":");
+                          nGramValue.get(currentLemma).add(new Pair<String, Integer>(ngram[0],Integer.parseInt(ngram[1])));
+                      }
                    }
 
                     //System.out.println(lemmaStored.get("Food").toString());
@@ -161,28 +167,20 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
                     });
                     words.addAll(cateSumMap.keySet());
 
-                    //System.out.println(words.size());
-
-//                    ArrayList<String> w = new ArrayList<>();
-
-
-
-                    for (int index = 0; index < 16; ++index) {
-                        w.add(words.poll());
-                        //System.out.println(words.poll());
-                    }
-                    //System.out.println(w.size());
-
-
-                    wordButtonDisplay(w);
-
-            }
+                            //System.out.println(words.size());
+                            /*
+                                                        while (words.size() > 0) {
+                                                            System.out.println(words.poll());
+                                                        }
+                                                        */
+                }
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
 
             }
         });
+
 
 
         btnSpeak = (Button) findViewById(R.id.listenButton);
@@ -206,10 +204,6 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
                 aStringValue = "";
             }
         });
-        ;
-        //createLayoutDynamically(2);
-        //wordButtonDisplay();
-
     }  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// OnCreated  method end ////////////////////////////////////////////////////////////
 
     private void setTextToView(Button bb) {
@@ -283,6 +277,11 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
         }
     }
 
+    private void wordSuggestion(int index, String prevWord, String prevPrevWord){
+        words = new PriorityQueue<String>((Collection<? extends String>) new HeuristicFunction(index,prevWord,prevPrevWord,nGramValue,cateSumMap));
+        words.addAll(cateSumMap.keySet());
+        /**Here need to load pq to UI and refresh the UI*/
+    }
     //speak the user text
     private void speakWords(String speech) {
         //speak straight away
