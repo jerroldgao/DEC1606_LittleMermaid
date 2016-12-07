@@ -22,6 +22,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.firebase.client.utilities.Pair;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -105,7 +106,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
 
         //
         cateSumMap = new HashMap<String, Integer>();
-
+        nGramValue = new HashMap<String,ArrayList<Pair<String,Integer>>>();
         //
 
 
@@ -128,20 +129,23 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
                           if(!lemmaStored.containsKey(setVal)){
                             lemmaStored.put(setVal, new HashMap<String,Integer>());
                           }
-                          if (!lemmaStored.get(setVal).containsKey(childSnapshot.child("lemma").getValue())){
-                            lemmaStored.get(setVal).put(childSnapshot.child("lemma").getValue().toString(),childSnapshot.child(setVal).getValue(Integer.class));
+                          if (!lemmaStored.get(setVal).containsKey(currentLemma)){
+                            lemmaStored.get(setVal).put(currentLemma,childSnapshot.child(setVal).getValue(Integer.class));
                           }
 
                       }
                       if (!nGramValue.containsKey(currentLemma)){
                           nGramValue.put(currentLemma,new ArrayList<Pair<String, Integer>>());
                       }
-                      String line = childSnapshot.child("Ngram").getValue().toString();
-                      line.replaceAll("\\{\\}","");
-                      String[] terms = line.toLowerCase().split(",");
-                      for (String term: terms){
-                          String[] ngram = term.split(":");
-                          nGramValue.get(currentLemma).add(new Pair<String, Integer>(ngram[0],Integer.parseInt(ngram[1])));
+                      if (childSnapshot.child("Ngram").exists()){
+                          String line = childSnapshot.child("Ngram").getValue().toString();
+                          line =line.replaceAll("[\\{\\}]","");
+                          String[] terms = line.toLowerCase().split(",");
+                          for (String term: terms){
+                              String[] ngram = term.split(":");
+                              //System.out.println(childSnapshot.getKey());
+                              nGramValue.get(currentLemma).add(new Pair<String, Integer>(ngram[0],Integer.parseInt(ngram[1])));
+                          }
                       }
                    }
 
@@ -167,12 +171,12 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
                     });
                     words.addAll(cateSumMap.keySet());
 
-                            //System.out.println(words.size());
-                            /*
-                                                        while (words.size() > 0) {
-                                                            System.out.println(words.poll());
-                                                        }
-                                                        */
+                    for(int i = 0; i < 16; i++){
+                        w.add(words.poll());
+                    }
+
+                    wordButtonDisplay(w);
+
                 }
 
             @Override
