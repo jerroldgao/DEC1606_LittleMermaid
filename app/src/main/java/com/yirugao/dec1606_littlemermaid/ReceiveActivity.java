@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -60,7 +61,6 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
 
     private HashSet<String> setSelected;
 
-    private HashMap<String,HashMap<String,Integer>> lemmaStored;
     private HashMap<String,Integer> cateSumMap;
     private HashMap<String,ArrayList<Pair<String,Integer>>> nGramValue;
     private PriorityQueue<String> words;
@@ -99,7 +99,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
         cateSumMap = new HashMap<String, Integer>();
 
         //
-        lemmaStored = new HashMap<String,HashMap<String, Integer>>();
+
         
 
         aRef = new Firebase("https://littlemermaid.firebaseio.com/dictionary/");
@@ -108,7 +108,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-
+                HashMap<String,HashMap<String,Integer>> lemmaStored = new HashMap<String,HashMap<String, Integer>>();
                   for (DataSnapshot childSnapshot : dataSnapshot.getChildren() ){
                       String currentLemma =childSnapshot.child("lemma").getValue().toString();
                       for(String setVal : setSelected){
@@ -267,6 +267,11 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
         }
     }
 
+    private void wordSuggestion(int index, String prevWord, String prevPrevWord){
+        words = new PriorityQueue<String>((Collection<? extends String>) new HeuristicFunction(index,prevWord,prevPrevWord,nGramValue,cateSumMap));
+        words.addAll(cateSumMap.keySet());
+        /**Here need to load pq to UI and refresh the UI*/
+    }
     //speak the user text
     private void speakWords(String speech) {
         //speak straight away
