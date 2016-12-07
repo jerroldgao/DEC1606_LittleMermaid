@@ -38,6 +38,7 @@
         android:layout_toStartOf="@+id/nextWordButton"
         android:layout_alignParentBottom="true"
         android:id="@+id/btnWord"
+        android:textSize="16pt"
         android:layout_below="@+id/selfTextWordView"></TableLayout>
 
     <TextView

@@ -37,6 +37,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.PriorityQueue;
 
+import static android.R.attr.button;
 import static android.R.attr.data;
 import static android.R.interpolator.linear;
 
@@ -59,7 +60,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
     private final int REQ_CODE_SPEECH_INPUT = 100;
     // Declare the voice recognizer
     private Button btnSpeak;
-
+    private ArrayList<Button> buttonList;
     /* Firebase*/
     private Firebase aRef;
 
@@ -71,6 +72,9 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
     private PriorityQueue<String> words;
 
     private ArrayList<String> w ;
+    private ArrayList<String> wordClick ;
+
+    private String prepreword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +102,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
         voiceTextWordView = (TextView) findViewById(R.id.voiceTextWordView);
 
         w = new ArrayList<>();
+        wordClick = new ArrayList<>();
 
         /* Get the user selected value from category page*/
         Intent intent = getIntent();
@@ -211,6 +216,11 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
     }  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// OnCreated  method end ////////////////////////////////////////////////////////////
 
     private void setTextToView(Button bb) {
+
+        String temp = (String) bb.getText();
+        wordClick.add(temp);
+        wordSuggestion(wordClick.size(), temp, prepreword);
+        prepreword = temp;
         aStringValue += bb.getText() + " ";
         selfTextWordView.setText(aStringValue);
     }
@@ -282,9 +292,12 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
     }
 
     private void wordSuggestion(int index, String prevWord, String prevPrevWord){
-        words = new PriorityQueue<String>((Collection<? extends String>) new HeuristicFunction(index,prevWord,prevPrevWord,nGramValue,cateSumMap));
+        words = new PriorityQueue<String>(cateSumMap.size(),new HeuristicFunction(index,prevWord,prevPrevWord,nGramValue,cateSumMap));
         words.addAll(cateSumMap.keySet());
         /**Here need to load pq to UI and refresh the UI*/
+        for (Button buttonWord : buttonList){
+            buttonWord.setText(words.poll());
+        }
     }
     //speak the user text
     private void speakWords(String speech) {
@@ -307,14 +320,11 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
 
     /*  Button Display */
     public void wordButtonDisplay(ArrayList<String> ar) {
-
-
+            buttonList = new ArrayList<Button>();
         try{
-            //create the 9 X 9 buttons on the table layout with correspond word
             for(int index = 0; index < ar.size(); index++){
 
                 TableLayout table = (TableLayout) findViewById( R.id.btnWord);
-
                 int buttonsInRow = 0;
                 int numRows = table.getChildCount();
                 TableRow row = null;
@@ -330,11 +340,16 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
                 }
                 if( buttonsInRow < 4 ){
                     Button bb = new Button( this );
+                    buttonList.add(bb);
                     row.addView( bb, 400, 250 );
                     bb.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            System.out.println();
+                            Button button = (Button) view;
+                            //String selectedText = button.getText().toString();
+                            //Toast.makeText(getApplicationContext(), selectedText, Toast.LENGTH_SHORT).show();
+                            setTextToView(button);
+                            //wordSuggestion();
                         }
                     });
                     bb.setText(ar.get(index));
