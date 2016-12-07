@@ -43,35 +43,41 @@ public class HeuristicFunction implements Comparator<String>{
     @Override
     public int compare(String lhs, String rhs) {
         if (flag==1) {
-            for (Pair<String, Integer> pair : nGramValues.get(prevWord)) {
-                String grams = pair.getFirst();
-                String[] gram = grams.split(" ");
-                if (gram[0].equals(lhs)) {
-                    leftGramValue += pair.getSecond();
-                }
-                if (gram[0].equals(rhs)) {
-                    rightGramValue += pair.getSecond();
+            if (nGramValues.containsKey(prevWord)){
+                for (Pair<String, Integer> pair : nGramValues.get(prevWord)) {
+                    String grams = pair.getFirst();
+                    String[] gram = grams.split(" ");
+                    if (gram[0].equals(lhs)) {
+                        leftGramValue += pair.getSecond();
+                    }
+                    if (gram[0].equals(rhs)) {
+                        rightGramValue += pair.getSecond();
+                    }
                 }
             }
         }else if (flag == 2){
-            for (Pair<String, Integer> pair : nGramValues.get(prevWord)) {
-                String grams = pair.getFirst();
-                String[] gram = grams.split(" ");
-                if (gram[0].equals(lhs)) {
-                    leftGramValue += pair.getSecond();
-                }
-                if (gram[0].equals(rhs)) {
-                    rightGramValue += pair.getSecond();
+            if (nGramValues.containsKey(prevWord)) {
+                for (Pair<String, Integer> pair : nGramValues.get(prevWord)) {
+                    String grams = pair.getFirst();
+                    String[] gram = grams.split(" ");
+                    if (gram[0].equals(lhs)) {
+                        leftGramValue += pair.getSecond();
+                    }
+                    if (gram[0].equals(rhs)) {
+                        rightGramValue += pair.getSecond();
+                    }
                 }
             }
-            for (Pair<String, Integer> pair: nGramValues.get(prevPrevWord)){
-                String grams = pair.getFirst();
-                String[] gram = grams.split(" ");
-                if (gram[0].equals(lhs)) {
-                    leftGramValue += pair.getSecond();
-                }
-                if (gram[0].equals(rhs)) {
-                    rightGramValue += pair.getSecond();
+            if (nGramValues.containsKey(prevPrevWord)) {
+                for (Pair<String, Integer> pair : nGramValues.get(prevPrevWord)) {
+                    String grams = pair.getFirst();
+                    String[] gram = grams.split(" ");
+                    if (gram[0].equals(lhs)) {
+                        leftGramValue += pair.getSecond();
+                    }
+                    if (gram[0].equals(rhs)) {
+                        rightGramValue += pair.getSecond();
+                    }
                 }
             }
         }

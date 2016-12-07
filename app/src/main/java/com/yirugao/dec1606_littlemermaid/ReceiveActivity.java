@@ -127,7 +127,7 @@ public class ReceiveActivity extends Activity implements View.OnClickListener, T
                           nGramValue.put(currentLemma,new ArrayList<Pair<String, Integer>>());
                       }
                       String line = childSnapshot.child("Ngram").getValue().toString();
-                      line.replaceAll("\\{\\}","");
+                      line.replaceAll("[\\{\\}]","");
                       String[] terms = line.toLowerCase().split(",");
                       for (String term: terms){
                           String[] ngram = term.split(":");
